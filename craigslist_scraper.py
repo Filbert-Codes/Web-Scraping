@@ -5,7 +5,7 @@ from time import sleep
 
 # text prompts that gets the search input from the user
 inputting = True
-print("Welcome to Alex Filbert's Craiglist web scraper.")
+print("Welcome to Alex's Craiglist web scraper.")
 sleep(2)
 print("Various information about each listing that is found will be put into an excel spreadsheet.")
 sleep(2)
@@ -67,14 +67,14 @@ while scraping:
     url = 'https://seattle.craigslist.org/search/sss?query={}&sort=rel'.format(input_1 + '&s=' + str(range_to))
 
     # Using the find method to get title, price, location, product page, and date for all items
-    for item in range(len(front_page_info)):
-        title = front_page_info[item].find(class_='result-title hdrlnk').get_text()
+    for item in range(num_of_items):
+        title = front_page_info[item].find(class_='result-title hdrlnk')[0].get_text()
         title_list.append(title)
-        price = front_page_info[item].find(class_='result-price').get_text()
+        price = front_page_info[item].find(class_='result-price')[0].get_text()
         price_list.append(price)
-        date = front_page_info[item].find(class_='result-date').get_text()
+        date = front_page_info[item].find(class_='result-date')[0].get_text()
         date_list.append(date)
-        href = front_page_info[item].find('a', href = True)['href']
+        href = front_page_info[item].find('a', href = True)[0]['href']
         href_list.append(href)
         # Not all items have locations and some have 'nearby' locations which are
         # different from normal (more specific) location data. This nested if-statement
@@ -173,7 +173,11 @@ front_page_df = pd.DataFrame(font_page_data)
 product_page_df = pd.DataFrame(product_page_data)
 # These csv files will overwrite its contents when run more than once
 # unless you change the name of the files
-export_csv_1 = front_page_df.to_csv(r'C:\users\alex\pythonprojects\cragslist_front_page_data.csv', index = None, header = True)
-export_csv_2 = product_page_df.to_csv(r'C:\users\alex\pythonprojects\cragslist_product_page_data.csv', index = None, header = True)
+# You will need to insert your directory here as the first argument and the name of the file must be specified.
+# For example: file_1_location = 'Users\Alex\python_things\front_page_results.csv'
+file_1_location = ''
+file_2_location = ''
+export_csv_1 = front_page_df.to_csv(r'{}'.format(file_1_location), index = None, header = True)
+export_csv_2 = product_page_df.to_csv(r'{}'.format(file_2_location), index = None, header = True)
 
 print('done')
